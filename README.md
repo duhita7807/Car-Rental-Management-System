@@ -25,4 +25,5 @@ Admin login: `Admin` / `Password` (hard-coded in `src/java/admin_login.java`; ch
 | `src/java/` | Servlets that handle form submissions (`booking`, `payment`, `user_login`, ...) and `Database.java` |
 | `web/*.jsp` | Pages; shared header, footer and DB helper live in `web/WEB-INF/includes/` |
 | `web/style.css` | Site theme (on top of Bootstrap 5) |
-| `database/car_rental_system.sql` | Database schema and sample data |
+| `database/car_rental_system.sql` | Database schema and 10 sample cars |
+| `web/cars/` | Car photos from Wikimedia Commons (credits in `web/cars/CREDITS.md`) |
