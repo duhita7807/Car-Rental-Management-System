@@ -1,221 +1,145 @@
-<%-- 
-    Document   : index
-    Created on : 27 Apr, 2025, 10:42:50 PM
-    Author     : pc
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ include file="WEB-INF/includes/db.jspf" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Home - Car Rental System</title>
-   
-    <link href="bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f2f2f2;
-        }
-        .banner {
-            background-image: url('car2.jfif');
-            background-size: cover;
-            background-position: center;
-            height: 90vh;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
-        }
-        .banner h1 {
-            font-size: 60px;
-            font-weight: bold;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.7);
-        }
-        .banner p {
-            font-size: 24px;
-            margin-top: 15px;
-            text-shadow: 1px 1px 5px rgba(0,0,0,0.6);
-        }
-        .btn-explore {
-            margin-top: 25px;
-            padding: 12px 30px;
-            font-size: 18px;
-            border-radius: 30px;
-        }
-        .section-title {
-            text-align: center;
-            margin-top: 60px;
-            margin-bottom: 40px;
-            font-weight: bold;
-            font-size: 36px;
-            color: #333;
-        }
-        .service-box, .car-box, .about-box {
-            background: #fff;
-            border-radius: 15px;
-            padding: 25px;
-            margin: 15px 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-            text-align: center;
-        }
-        .service-box:hover, .car-box:hover {
-            transform: translateY(-10px);
-        }
-        .footer {
-            background-color: black;
-            color: #aaa;
-            text-align: center;
-            padding: 20px;
-            margin-top: 50px;
-        }
-        .about-section {
-            background: #fff;
-            padding: 50px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin: 50px 0;
-        }
-    </style>
+    <title>DriveEase - Self-Drive Car Rental</title>
+    <%@ include file="WEB-INF/includes/head.jspf" %>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand fw-bold" href="home.jsp">CarRental</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+<%@ include file="WEB-INF/includes/header.jspf" %>
 
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-      <ul class="navbar-nav">
-
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="home.jsp">Home</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="#">Cars</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="#">About Us</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="#">Contact</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="user_login.jsp">
-            <button class="btn btn-outline-warning btn-sm">User Login</button>
-          </a>
-            <a class="nav-link" href="admin_login.jsp">
-            <button class="btn btn-outline-warning btn-sm">Admin Login</button>
-          </a>
-        </li>
-
-      </ul>
+<main>
+<section class="hero">
+  <div class="container">
+    <span class="eyebrow">Self-drive rentals across Maharashtra</span>
+    <h1 class="mt-3">Rent the right car,<br><span>drive on your terms.</span></h1>
+    <p class="lead mt-3">Hatchbacks, sedans and SUVs from trusted brands. Transparent daily pricing, no hidden charges, unlimited kilometres.</p>
+    <div class="d-flex gap-3 mt-4 flex-wrap">
+      <a href="view_car.jsp" class="btn btn-accent btn-lg">Browse cars</a>
+      <a href="view_brands.jsp" class="btn btn-ghost btn-lg">View brands</a>
     </div>
   </div>
-</nav>
-<!-- Banner -->
-<div class="banner">
-    <h1>Drive Your Dreams</h1>
-    <p>Reliable, Affordable, and Stylish Cars at Your Service</p>
-    <a href="car_list.jsp" class="btn btn-warning btn-explore">Explore Our Cars</a>
-</div>
+</section>
 
-<!-- Services -->
 <div class="container">
-    <h2 class="section-title">Our Services</h2>
-    <div class="row text-center">
-        <div class="col-md-4">
-            <div class="service-box">
-                <img src="car3.jfif" width="70" alt="Easy Booking">
-                <h4>Easy Booking</h4>
-                <p>Book your favorite car in just a few clicks from anywhere.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="service-box">
-                <img src="car4.jfif" width="70" alt="Affordable Prices">
-                <h4>Affordable Prices</h4>
-                <p>Competitive rates without compromising on quality or service.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="service-box">
-                <img src="car5.jfif" width="70" alt="24/7 Support">
-                <h4>24/7 Support</h4>
-                <p>Our team is always available to assist you, day or night.</p>
-            </div>
-        </div>
+  <form class="search-card row g-3 align-items-end" action="view_car.jsp" method="get">
+    <div class="col-md-5">
+      <label class="form-label">Which car are you looking for?</label>
+      <input type="text" name="search_car" class="form-control" placeholder="e.g. Creta, Swift, Fortuner">
     </div>
-</div>
-
-<!-- About Us -->
-<div class="container">
-    <h2 class="section-title">About Us</h2>
-    <div class="about-section">
-        <div class="row">
-            <div class="col-md-6">
-                <img src="car1.jfif" alt="About Car Rental" class="img-fluid rounded">
-            </div>
-            <div class="col-md-6 d-flex align-items-center">
-                <div class="about-box">
-                    <h4>Who We Are</h4>
-                    <p>We are a trusted car rental company offering the best vehicles at unbeatable prices. Whether you need a car for a business trip, vacation, or daily use, we have the right car for you. Enjoy seamless booking, well-maintained vehicles, and excellent customer service with us!</p>
-                </div>
-            </div>
-        </div>
+    <div class="col-md-5">
+      <label class="form-label">Brand</label>
+      <select name="brand_name" class="form-select">
+        <option value="">All brands</option>
+        <%
+            try {
+                Connection cn = getConn();
+                ResultSet rs = cn.createStatement().executeQuery("SELECT bname FROM car_brand ORDER BY bname");
+                while (rs.next()) {
+        %>
+        <option><%= esc(rs.getString("bname")) %></option>
+        <%
+                }
+                cn.close();
+            } catch (Exception e) { /* brand list is optional; search still works */ }
+        %>
+      </select>
     </div>
-</div>
-
-<!-- Popular Cars -->
-<div class="container">
-    <h2 class="section-title">Popular Cars</h2>
-    <div class="row text-center">
-        <div class="col-md-3">
-            <div class="car-box">
-                <img src="car2.jfif" width="100%" class="rounded" alt="Honda City">
-                <h5 class="mt-3">Honda City</h5>
-                <p>₹1500/day</p>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="car-box">
-                <img src="car7.jfif" width="100%" class="rounded" alt="Hyundai Creta">
-                <h5 class="mt-3">Hyundai Creta</h5>
-                <p>₹1800/day</p>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="car-box">
-                <img src="car8.jfif" width="100%" class="rounded" alt="Maruti Swift">
-                <h5 class="mt-3">Maruti Swift</h5>
-                <p>₹1200/day</p>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="car-box">
-                <img src="car9.jfif" width="100%" class="rounded" alt="Toyota Fortuner">
-                <h5 class="mt-3">Toyota Fortuner</h5>
-                <p>₹3500/day</p>
-            </div>
-        </div>
+    <div class="col-md-2 d-grid">
+      <button class="btn btn-accent">Search</button>
     </div>
+  </form>
 </div>
 
-<!-- Footer -->
-<div class="footer">
-    <p>© 2025 Car Rental System. Designed with ❤️ by Your Team.</p>
-</div>
+<section class="section">
+  <div class="container">
+    <div class="text-center">
+      <h2 class="section-title">Popular cars</h2>
+      <p class="section-sub">Our most booked cars this month, serviced and sanitised before every trip.</p>
+    </div>
+    <div class="row g-4">
+      <%
+          try {
+              Connection cn = getConn();
+              ResultSet rs = cn.createStatement().executeQuery("SELECT * FROM car_details ORDER BY car_id LIMIT 4");
+              boolean any = false;
+              while (rs.next()) { any = true;
+      %>
+      <div class="col-sm-6 col-lg-3">
+        <div class="car-card">
+          <img src="<%= esc(rs.getString("image1")) %>" alt="<%= esc(rs.getString("car_name")) %>">
+          <div class="body">
+            <span class="muted"><%= esc(rs.getString("car_brand")) %></span>
+            <h5><%= esc(rs.getString("car_name")) %></h5>
+            <div class="specs">
+              <span class="spec"><%= rs.getInt("seating_capacity") %> seats</span>
+              <span class="spec"><%= esc(rs.getString("mileage")) %> km/l</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mt-auto">
+              <div class="price">&#8377;<%= rs.getInt("rate_per_day") %> <small>/day</small></div>
+              <form action="booking.jsp" method="post" class="m-0">
+                <input type="hidden" name="car_name" value="<%= esc(rs.getString("car_name")) %>">
+                <input type="hidden" name="rate_per_day" value="<%= rs.getInt("rate_per_day") %>">
+                <button class="btn btn-accent btn-sm">Book</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <%
+              }
+              cn.close();
+              if (!any) out.println("<p class='text-center text-muted'>No cars added yet.</p>");
+          } catch (Exception e) {
+              out.println("<p class='text-center text-danger'>Could not load cars: " + esc(e.getMessage()) + "</p>");
+          }
+      %>
+    </div>
+    <div class="text-center mt-4"><a href="view_car.jsp" class="fw-semibold">See all cars &rarr;</a></div>
+  </div>
+</section>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<section class="stats">
+  <div class="container">
+    <div class="row text-center g-4">
+      <div class="col-6 col-md-3"><h3>500+</h3><p>Happy customers</p></div>
+      <div class="col-6 col-md-3"><h3>50+</h3><p>Cars in fleet</p></div>
+      <div class="col-6 col-md-3"><h3>4.8&#9733;</h3><p>Average rating</p></div>
+      <div class="col-6 col-md-3"><h3>24/7</h3><p>Roadside support</p></div>
+    </div>
+  </div>
+</section>
 
+<section class="section">
+  <div class="container">
+    <div class="text-center">
+      <h2 class="section-title">Why rent with us</h2>
+      <p class="section-sub">Everything you need for a stress-free trip, included in the price.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4"><div class="feature"><div class="icon">&#128179;</div><h5>Transparent pricing</h5><p>One daily rate with insurance and taxes included. What you see is what you pay.</p></div></div>
+      <div class="col-md-4"><div class="feature"><div class="icon">&#128663;</div><h5>Well-maintained fleet</h5><p>Every car is inspected, serviced and cleaned before it reaches you.</p></div></div>
+      <div class="col-md-4"><div class="feature"><div class="icon">&#128222;</div><h5>24/7 support</h5><p>Breakdown or flat tyre? Our team is one call away, day or night.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section bg-white" id="how">
+  <div class="container">
+    <div class="text-center">
+      <h2 class="section-title">How it works</h2>
+      <p class="section-sub">Get on the road in three simple steps.</p>
+    </div>
+    <div class="row g-4 text-center">
+      <div class="col-md-4"><div class="step-num">1</div><h5>Choose a car</h5><p class="text-muted">Browse by brand, seats and price to find the right fit.</p></div>
+      <div class="col-md-4"><div class="step-num">2</div><h5>Pick your dates</h5><p class="text-muted">Select pick-up and return dates and see the total instantly.</p></div>
+      <div class="col-md-4"><div class="step-num">3</div><h5>Pay &amp; drive</h5><p class="text-muted">Pay securely by card or UPI and collect your keys.</p></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<%@ include file="WEB-INF/includes/footer.jspf" %>
 </body>
 </html>

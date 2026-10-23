@@ -1,96 +1,72 @@
-<%-- 
-    Document   : add_car_brand
-    Created on : 27 Apr, 2025, 10:48:08 PM
-    Author     : pc
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ include file="WEB-INF/includes/db.jspf" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Add Car Brand</title>
-   <%@ include file="navbar.jsp" %>
-    <link rel="stylesheet" href="bootstrap.min.css">
-    <style>
-        body {
-            background-image: url('car1.jfif');
-            background-size: cover;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .header-container {
-            background-color: black;
-            width: 40%;
-            padding: 15px 0;
-            text-align: center;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .header-container h2 {
-            color: white;
-            margin: 0;
-        }
-
-        .form-container {
-            background-color: white;
-            padding: 30px;
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 10px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-            width: 40%;
-        }
-
-        h3, label {
-            color: black;
-        }
-
-        .btn-group {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-        }
-    </style>
+    <title>Brands - DriveEase Admin</title>
+    <%@ include file="WEB-INF/includes/head.jspf" %>
 </head>
 <body>
+<%@ include file="WEB-INF/includes/admin_nav.jspf" %>
 
-<div class="header-container">
-    <h2>Car Brand Details</h2>
-</div>
-
-<div class="form-container">
-   
-    <form action="car_brand" method="post" >
+<main class="container py-5">
+  <h2 class="fw-bold mb-4">Car brands</h2>
+  <div class="row g-4">
+    <div class="col-lg-5">
+      <form action="car_brand" method="post" class="form-card">
+        <h5 class="mb-3">Add / update / delete brand</h5>
         <div class="mb-3">
-            <label for="BrandName" class="form-label">Brand Name</label>
-            <input type="text" class="form-control" id="BrandName" name="bname" placeholder="Enter Brand Name" required>
+          <label for="BrandName" class="form-label">Brand name</label>
+          <input type="text" class="form-control" id="BrandName" name="bname" placeholder="e.g. Honda" required>
         </div>
-
         <div class="mb-3">
-            <label for="brandImage" class="form-label">Brand Image</label>
-            <input type="file" class="form-control" id="brandImage" name="brand_image" accept="image/*" required>
+          <label for="brandImage" class="form-label">Brand image</label>
+          <input type="file" class="form-control" id="brandImage" name="brand_image" accept="image/*">
+          <div class="form-text">Copy the image into the <code>web</code> folder first; only its file name is saved.</div>
         </div>
-
         <div class="mb-3">
-            <label for="brandDesc" class="form-label">Brand Description</label>
-            <textarea class="form-control" id="brandDesc" name="brand_desc" placeholder="Enter Brand Description" rows="4" required></textarea>
+          <label for="brandDesc" class="form-label">Description</label>
+          <textarea class="form-control" id="brandDesc" name="brand_desc" rows="3"></textarea>
         </div>
-
-        <div class="btn-group">
-            <input type="submit" class="btn btn-success w-100" name="btn" value="Insert">
-            <input type="submit" class="btn btn-warning w-100" name="btn" value="Update">
-            <input type="submit" class="btn btn-danger w-100" name="btn" value="Delete">
+        <div class="d-flex gap-2">
+          <input type="submit" class="btn btn-success w-100" name="btn" value="Insert">
+          <input type="submit" class="btn btn-warning w-100" name="btn" value="Update">
+          <input type="submit" class="btn btn-danger w-100" name="btn" value="Delete">
         </div>
-    </form>
-</div>
+      </form>
+    </div>
+    <div class="col-lg-7">
+      <div class="table-card table-responsive">
+        <table class="table">
+          <thead><tr><th>Image</th><th>Brand</th><th>Description</th></tr></thead>
+          <tbody>
+          <%
+              try {
+                  Connection cn = getConn();
+                  ResultSet rs = cn.createStatement().executeQuery("SELECT * FROM car_brand ORDER BY bname");
+                  boolean any = false;
+                  while (rs.next()) { any = true;
+          %>
+            <tr>
+              <td><img src="<%= esc(rs.getString("brand_image")) %>" alt="" width="64" height="40" style="object-fit:cover;border-radius:6px"></td>
+              <td class="fw-semibold"><%= esc(rs.getString("bname")) %></td>
+              <td class="text-muted small"><%= esc(rs.getString("brand_desc")) %></td>
+            </tr>
+          <%
+                  }
+                  cn.close();
+                  if (!any) out.println("<tr><td colspan='3' class='empty'>No brands yet.</td></tr>");
+              } catch (Exception e) {
+                  out.println("<tr><td colspan='3' class='text-danger'>Error: " + esc(e.getMessage()) + "</td></tr>");
+              }
+          %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-

@@ -44,15 +44,14 @@ public class user_login extends HttpServlet {
          {
              try
              {
-               Class.forName("com.mysql.jdbc.Driver");
-            cn=DriverManager.getConnection("jdbc:mysql://localhost:3307/car_rental_system","root","root");
+            cn=Database.getConnection();
               st=cn.createStatement();
               String sql="select * from ureg where uname='"+user.toString()+"'and psd='"+apass.toString()+"'";
               ResultSet rs=st.executeQuery(sql);
               if(rs.next())
               {
                   
-                 
+                  session.setAttribute("user", rs.getString("fname"));
                   resp.sendRedirect("view_brands.jsp");
               }
               else

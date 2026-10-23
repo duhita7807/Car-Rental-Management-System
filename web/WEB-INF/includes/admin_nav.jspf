@@ -1,0 +1,26 @@
+<%
+    // Only a logged-in admin may open admin pages
+    if (session.getAttribute("admin") == null) {
+        response.sendRedirect("admin_login.jsp");
+        return;
+    }
+%>
+<nav class="navbar navbar-expand-lg site-nav admin-nav">
+  <div class="container">
+    <a class="brand" href="add_car_brand.jsp">Drive<span>Ease</span> <small class="text-secondary fs-6 fw-normal">Admin</small></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNav" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="adminNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="add_car_brand.jsp">Brands</a></li>
+        <li class="nav-item"><a class="nav-link" href="car_details.jsp">Cars</a></li>
+        <li class="nav-item"><a class="nav-link" href="view_user.jsp">Users</a></li>
+        <li class="nav-item"><a class="nav-link" href="view_booking.jsp">Bookings</a></li>
+        <li class="nav-item"><a class="nav-link" href="view_payment.jsp">Payments</a></li>
+        <li class="nav-item"><a class="nav-link" href="view_feedback.jsp">Feedback</a></li>
+        <li class="nav-item"><a class="btn btn-ghost btn-sm ms-lg-3" href="logout.jsp">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>

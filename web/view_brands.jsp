@@ -1,104 +1,56 @@
-<%-- 
-    Document   : view_brands
-    Created on : 27 Apr, 2025, 11:08:18 PM
-    Author     : pc
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="java.sql.*"%>
+<%@ include file="WEB-INF/includes/db.jspf" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Car Brands</title>
- 
-    <link href="bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-image: url(car8.jfif);
-            font-family: 'Segoe UI', sans-serif;
-            padding-top: 50px;
-            background-size: cover;
-        }
-
-        .container {
-            max-width: 1200px;
-        }
-
-        .car-card {
-            border-radius: 15px;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            margin-bottom: 30px;
-            background-color: #fff;
-        }
-
-        .car-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-
-        .car-body {
-            padding: 20px;
-        }
-
-        .car-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #0288d1;
-        }
-
-        .car-desc {
-            font-size: 1rem;
-            color: #555;
-            margin-top: 10px;
-        }
-
-        h2 {
-            text-align: center;
-            color: #01579b;
-            margin-bottom: 40px;
-        }
-    </style>
+    <title>Car Brands - DriveEase</title>
+    <%@ include file="WEB-INF/includes/head.jspf" %>
 </head>
 <body>
+<%@ include file="WEB-INF/includes/header.jspf" %>
 
-<div class="container">
-    <h1 style="color: black"><center>Available Car Brands</center></h1><br>
-    <div class="row">
-        <%
-            try {
-                Class.forName("com.mysql.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3307/car_rental_system", "root", "root");
-                Statement stmt = con.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT * FROM car_brand");
-
-                while (rs.next()) {
-        %>
-        <div class="col-md-4">
-            <div class="car-card">
-                <img src="<%= rs.getString("brand_image") %>" alt="Car Brand Image" class="car-image">
-                <div class="car-body">
-                    <form action="view_car.jsp" method="post">
-                        <div class="car-title"><%= rs.getString("bname") %></div>
-                        <input type="hidden" name="brand_name" value="<%= rs.getString("bname") %>">
-                        <div class="car-desc"><%= rs.getString("brand_desc") %></div><br>
-                        <input type="submit" name="btn_submit" value="View Cars" class="btn btn-primary">
-                    </form>
-                </div>
-            </div>
-        </div>
-        <%
-                }
-                con.close();
-            } catch (Exception e) {
-                out.println("<p class='text-danger text-center'>Error: " + e.getMessage() + "</p>");
-            }
-        %>
-    </div>
+<main>
+<div class="page-head">
+  <div class="container">
+    <h1>Choose a brand</h1>
+    <p>Pick a manufacturer to see every car we have from them.</p>
+  </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<div class="container py-5">
+  <div class="row g-4">
+    <%
+        try {
+            Connection cn = getConn();
+            ResultSet rs = cn.createStatement().executeQuery("SELECT * FROM car_brand ORDER BY bname");
+            boolean any = false;
+            while (rs.next()) { any = true;
+    %>
+    <div class="col-sm-6 col-lg-4">
+      <div class="car-card">
+        <img src="<%= esc(rs.getString("brand_image")) %>" alt="<%= esc(rs.getString("bname")) %>">
+        <div class="body">
+          <h5><%= esc(rs.getString("bname")) %></h5>
+          <p class="muted"><%= esc(rs.getString("brand_desc")) %></p>
+          <form action="view_car.jsp" method="get" class="mt-auto">
+            <input type="hidden" name="brand_name" value="<%= esc(rs.getString("bname")) %>">
+            <button class="btn btn-accent w-100">View cars</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <%
+            }
+            cn.close();
+            if (!any) out.println("<p class='text-muted text-center'>No brands added yet.</p>");
+        } catch (Exception e) {
+            out.println("<p class='text-danger text-center'>Error: " + esc(e.getMessage()) + "</p>");
+        }
+    %>
+  </div>
+</div>
+</main>
+
+<%@ include file="WEB-INF/includes/footer.jspf" %>
 </body>
 </html>

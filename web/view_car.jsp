@@ -1,155 +1,88 @@
-<%-- 
-    Document   : view_car
-    Created on : 28 Apr, 2025, 5:39:03 AM
-    Author     : pc
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="java.sql.*"%>
+<%@ include file="WEB-INF/includes/db.jspf" %>
+<%
+    String searchCar = request.getParameter("search_car");
+    String brandName = request.getParameter("brand_name");
+    if (searchCar == null) searchCar = "";
+    if (brandName == null) brandName = "";
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Explore Cars</title>
-  <link href="bootstrap.min.css" rel="stylesheet">
-  <style>
-    body {
-      background: #f9f9f9;
-      font-family: 'Poppins', sans-serif;
-    }
-    .container {
-      margin-top: 40px;
-      max-width: 1100px;
-    }
-    .car-card {
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-      overflow: hidden;
-      margin-bottom: 30px;
-      padding: 20px;
-    }
-    .car-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-    .car-info {
-      flex: 1;
-      min-width: 300px;
-    }
-    .car-images {
-      flex: 1;
-      min-width: 300px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .car-title {
-      font-size: 1.8rem;
-      color: #0077b6;
-      font-weight: bold;
-      margin-bottom: 15px;
-    }
-    .info-item {
-      font-size: 1rem;
-      margin-bottom: 10px;
-      color: #555;
-    }
-    .car-img {
-      width: 100%;
-      height: 150px;
-      object-fit: cover;
-      border-radius: 10px;
-    }
-    .bottom-section {
-      margin-top: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .badge {
-      font-size: 0.85rem;
-      padding: 10px 15px;
-    }
-    .book-btn {
-      border-radius: 25px;
-      margin-top: 10px;
-    }
-  </style>
+    <title>Cars - DriveEase</title>
+    <%@ include file="WEB-INF/includes/head.jspf" %>
 </head>
-
 <body>
+<%@ include file="WEB-INF/includes/header.jspf" %>
 
-<div class="container">
-  <h2 class="text-center text-primary mb-5">Explore Our Cars</h2>
-
-  <!-- Search Box -->
-  <form method="get" action="view_car.jsp" class="mb-4">
-    <div class="input-group">
-      <input type="text" name="search_car" class="form-control" placeholder="Search by car name..." value="<%= request.getParameter("search_car") != null ? request.getParameter("search_car") : "" %>">
-      <button class="btn btn-primary" type="submit">Search</button>
-    </div>
-  </form>
-
-<%
-    String searchCar = request.getParameter("search_car");
-
-    try {
-        Class.forName("com.mysql.jdbc.Driver");
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3307/car_rental_system", "root", "root");
-        
-        Statement stmt = con.createStatement();
-        String sql = "SELECT * FROM car_details";
-        
-        if (searchCar != null && !searchCar.isEmpty()) {
-            sql += " WHERE cname LIKE '%" + searchCar + "%'";
-        }
-
-        ResultSet rs = stmt.executeQuery(sql);
-
-        while (rs.next()) {
-%>
-  <div class="car-card">
-  
-    <div class="car-row">
-      <div class="car-info">
-        <h5 class="car-title"><%= rs.getString("car_name") %></h5>
-        <div class="info-item"><strong>Brand:</strong> <%= rs.getString("car_brand") %></div>
-        <div class="info-item"><strong>Seating Capacity:</strong> <%= rs.getInt("seating_capacity") %> persons</div>
-        <div class="info-item"><strong>Rate per Day:</strong> ₹<%= rs.getDouble("rate_per_day") %></div>
-        <div class="info-item"><strong>Mileage:</strong> <%= rs.getString("mileage") %> km/l</div>
-      </div>
-
-      <div class="car-images">
-        <img src="<%= rs.getString("image1") %>" alt="Car Image 1" class="car-img">
-        <img src="<%= rs.getString("image2") %>" alt="Car Image 2" class="car-img">
-      </div>
-    </div>
-
-    <div class="bottom-section">
-      <span class="badge bg-success">Available</span>
-
-      <form action="booking.jsp" method="post">
-        <input type="hidden" name="car_name" value="<%= rs.getString("car_name") %>">
-        <input type="hidden" name="rate_per_day" value="<%= rs.getDouble("rate_per_day") %>">
-        <button type="submit" class="btn btn-success book-btn">Book Now</button>
-      </form>
-    </div>
-
+<main>
+<div class="page-head">
+  <div class="container">
+    <h1><%= brandName.isEmpty() ? "All cars" : esc(brandName) + " cars" %></h1>
+    <p>Daily rates include insurance and unlimited kilometres.</p>
   </div>
-<%
-      }
-      con.close();
-    } catch (Exception e) {
-      out.println("<p class='text-danger text-center'>Error: " + e.getMessage() + "</p>");
-    }
-%>
-
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<div class="container py-5">
+  <form method="get" action="view_car.jsp" class="row g-2 mb-4">
+    <input type="hidden" name="brand_name" value="<%= esc(brandName) %>">
+    <div class="col-md-10">
+      <input type="text" name="search_car" class="form-control" placeholder="Search by car name..." value="<%= esc(searchCar) %>">
+    </div>
+    <div class="col-md-2 d-grid"><button class="btn btn-accent">Search</button></div>
+  </form>
+
+  <div class="row g-4">
+  <%
+      try {
+          Connection cn = getConn();
+          PreparedStatement ps = cn.prepareStatement(
+               "SELECT * FROM car_details WHERE car_name LIKE ? AND (? = '' OR car_brand = ?) ORDER BY rate_per_day");
+          ps.setString(1, "%" + searchCar + "%");
+          ps.setString(2, brandName);
+          ps.setString(3, brandName);
+          ResultSet rs = ps.executeQuery();
+          boolean any = false;
+          while (rs.next()) { any = true;
+  %>
+    <div class="col-md-6 col-lg-4">
+      <div class="car-card">
+        <img src="<%= esc(rs.getString("image1")) %>" alt="<%= esc(rs.getString("car_name")) %>">
+        <div class="body">
+          <div class="d-flex justify-content-between">
+            <span class="muted"><%= esc(rs.getString("car_brand")) %></span>
+            <span class="badge bg-success align-self-start">Available</span>
+          </div>
+          <h5><%= esc(rs.getString("car_name")) %></h5>
+          <p class="muted mb-0"><%= esc(rs.getString("car_description")) %></p>
+          <div class="specs">
+            <span class="spec"><%= rs.getInt("seating_capacity") %> seats</span>
+            <span class="spec"><%= esc(rs.getString("mileage")) %> km/l</span>
+            <span class="spec">Insurance incl.</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center mt-auto">
+            <div class="price">&#8377;<%= rs.getInt("rate_per_day") %> <small>/day</small></div>
+            <form action="booking.jsp" method="post" class="m-0">
+              <input type="hidden" name="car_name" value="<%= esc(rs.getString("car_name")) %>">
+              <input type="hidden" name="rate_per_day" value="<%= rs.getInt("rate_per_day") %>">
+              <button class="btn btn-accent">Book now</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  <%
+          }
+          cn.close();
+          if (!any) out.println("<p class='text-muted text-center'>No cars match your search.</p>");
+      } catch (Exception e) {
+          out.println("<p class='text-danger text-center'>Error: " + esc(e.getMessage()) + "</p>");
+      }
+  %>
+  </div>
+</div>
+</main>
+
+<%@ include file="WEB-INF/includes/footer.jspf" %>
 </body>
 </html>
-

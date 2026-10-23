@@ -1,162 +1,107 @@
-<%-- 
-    Document   : payment
-    Created on : 27 Apr, 2025, 11:32:33 PM
-    Author     : pc
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ include file="WEB-INF/includes/db.jspf" %>
+<%
+    Object total = session.getAttribute("totalPrice");
+    Object car = session.getAttribute("carName");
+%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Payment</title>
-    <link rel="stylesheet" href="bootstrap.css">
-    <script src="validation.js"></script>
-
-    <script>
-        function showPaymentOption() {
-            var paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-            document.getElementById('netBankingForm').style.display = paymentMethod === 'netbanking' ? 'block' : 'none';
-            document.getElementById('upiForm').style.display = paymentMethod === 'upi' ? 'block' : 'none';
-        }
-
-        function validatePayment() {
-            var paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-            
-            if (paymentMethod === 'netbanking') {
-                var cardNumber = document.getElementById('cardNumber').value;
-                var cvv = document.getElementById('cvv').value;
-                var expiry = document.getElementById('expiryDate').value;
-
-                if (cardNumber.length !== 16 || isNaN(cardNumber)) {
-                    alert("Please enter a valid 16-digit card number.");
-                    return false;
-                }
-
-                if (cvv.length !== 3 || isNaN(cvv)) {
-                    alert("Please enter a valid 3-digit CVV.");
-                    return false;
-                }
-
-                if (!expiry) {
-                    alert("Please enter the expiry date.");
-                    return false;
-                }
-            } else if (paymentMethod === 'upi') {
-                var upiId = document.getElementById('upiId').value;
-                if (!upiId) {
-                    alert("Please enter a valid UPI ID.");
-                    return false;
-                }
-            }
-            return true;
-        }
-
-       
-        document.addEventListener('DOMContentLoaded', () => {
-            let today = new Date().toISOString().split('T')[0];
-            document.getElementById('expiryDate').setAttribute('min', today);
-        });
-    </script>
-
-    <style>
-        body {
-            background-color: lightsteelblue;
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .container {
-            background: #ffffff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            max-width: 500px;
-        }
-
-        h2 {
-            color: #333;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        input[type=text], input[type=number], input[type=password], input[type=date] {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-
-        input[type=submit] {
-            background-color: #007BFF;
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 16px;
-            transition: 0.3s;
-        }
-
-        input[type=submit]:hover {
-            background-color: #0056b3;
-        }
-
-        .payment-option {
-            margin-bottom: 20px;
-        }
-    </style>
+    <title>Payment - DriveEase</title>
+    <%@ include file="WEB-INF/includes/head.jspf" %>
 </head>
 <body>
-    <div class="container">
-        <h2>Payment</h2>
+<%@ include file="WEB-INF/includes/header.jspf" %>
 
+<main>
+<div class="page-head">
+  <div class="container">
+    <h1>Secure payment</h1>
+    <p>Your booking is reserved. Complete payment to confirm it.</p>
+  </div>
+</div>
 
-        <form action="payment" method="post" >
-       
+<div class="container py-5">
+  <div class="row g-4">
+    <div class="col-lg-7">
+      <form action="payment" method="post" class="form-card" onsubmit="return validatePayment()">
+        <h5 class="mb-3">Payment method</h5>
+        <div class="row g-3 mb-4">
+          <div class="col-6">
+            <label class="pay-option"><input type="radio" name="paymentMethod" value="card" onclick="showPaymentOption()" required> Debit / Credit card</label>
+          </div>
+          <div class="col-6">
+            <label class="pay-option"><input type="radio" name="paymentMethod" value="upi" onclick="showPaymentOption()"> UPI</label>
+          </div>
+        </div>
 
-          
-
-            <div class="payment-option">
-                <label>Payment Method:</label>
-                <input type="radio" name="paymentMethod" value="netbanking" onclick="showPaymentOption()" required> Net Banking
-                <input type="radio" name="paymentMethod" value="upi" onclick="showPaymentOption()"> UPI
+        <div id="cardForm" style="display:none">
+          <div class="mb-3">
+            <label class="form-label">Name on card</label>
+            <input type="text" name="fullName" class="form-control" placeholder="Full name">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Card number</label>
+            <input type="text" name="cardNumber" id="cardNumber" class="form-control" placeholder="1234 5678 9012 3456" inputmode="numeric" maxlength="16">
+          </div>
+          <div class="row g-3">
+            <div class="col-6">
+              <label class="form-label">Expiry</label>
+              <input type="month" name="expiryDate" id="expiryDate" class="form-control">
             </div>
-
-            <!-- Net Banking Form -->
-            <div id="netBankingForm" style="display: none;">
-                <label>Full Name:</label>
-                <input type="text" name="fullName" placeholder="Enter Full Name">
-                <label>Card Number:</label>
-                <input type="text" name="cardNumber" id="cardNumber" placeholder="Enter 16-digit Card Number" onkeypress="return isNumber(event)" maxlength="16">
-                <label>CVV:</label>
-                <input type="password" name="cvv" id="cvv" placeholder="Enter 3-digit CVV" onkeypress="return isNumber(event)" maxlength="3">
-                <label>Expiry Date:</label>
-                <input type="date" name="expiryDate" id="expiryDate">
+            <div class="col-6">
+              <label class="form-label">CVV</label>
+              <input type="password" id="cvv" class="form-control" placeholder="&bull;&bull;&bull;" inputmode="numeric" maxlength="3">
             </div>
+          </div>
+        </div>
 
-            <!-- UPI Form -->
-            <div id="upiForm" style="display: none;">
-                <label>UPI ID:</label>
-                <input type="text" name="upiId" id="upiId" placeholder="Enter UPI ID">
-            </div>
-            <br>
-            <input type="submit" name="paymentMethod" value="Pay">
-        </form>
+        <div id="upiForm" style="display:none">
+          <label class="form-label">UPI ID</label>
+          <input type="text" name="upiId" id="upiId" class="form-control" placeholder="name@okbank">
+        </div>
+
+        <button type="submit" class="btn btn-accent w-100 mt-4">Pay &#8377;<%= total == null ? "" : esc(total) %></button>
+        <p class="small text-muted text-center mt-3 mb-0">&#128274; Your CVV is never stored.</p>
+      </form>
     </div>
+
+    <div class="col-lg-5">
+      <div class="summary">
+        <h5 class="mb-3">Order summary</h5>
+        <div class="row-line"><span>Car</span><span><%= car == null ? "-" : esc(car) %></span></div>
+        <div class="row-line"><span>Insurance &amp; taxes</span><span>Included</span></div>
+        <div class="total"><span>Amount due</span><span>&#8377;<%= total == null ? "0" : esc(total) %></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+
+<%@ include file="WEB-INF/includes/footer.jspf" %>
+<script>
+    document.getElementById('expiryDate').min = new Date().toISOString().slice(0, 7);
+
+    function method() {
+        var m = document.querySelector('input[name="paymentMethod"]:checked');
+        return m ? m.value : '';
+    }
+
+    function showPaymentOption() {
+        document.getElementById('cardForm').style.display = method() === 'card' ? 'block' : 'none';
+        document.getElementById('upiForm').style.display = method() === 'upi' ? 'block' : 'none';
+    }
+
+    function validatePayment() {
+        if (method() === 'card') {
+            if (!/^\d{16}$/.test(document.getElementById('cardNumber').value)) { alert('Please enter a valid 16-digit card number.'); return false; }
+            if (!/^\d{3}$/.test(document.getElementById('cvv').value)) { alert('Please enter a valid 3-digit CVV.'); return false; }
+            if (!document.getElementById('expiryDate').value) { alert('Please enter the expiry date.'); return false; }
+        } else if (method() === 'upi') {
+            if (!/^[\w.\-]+@[\w]+$/.test(document.getElementById('upiId').value)) { alert('Please enter a valid UPI ID.'); return false; }
+        }
+        return true;
+    }
+</script>
 </body>
 </html>

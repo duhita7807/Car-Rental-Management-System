@@ -47,7 +47,8 @@ if(event.equals("Confirm Booking")) {
                                + endDate.toString() + "','" + totalDays.toString() + "','" + totalPrice.toString() + "')");
     out.println(insert); 
     HttpSession session = req.getSession(); 
-    session.setAttribute("totalPrice", req.getParameter("totalPrice")); 
+    session.setAttribute("totalPrice", totalPrice);
+    session.setAttribute("carName", carName); 
     resp.sendRedirect("payment.jsp"); 
 }
 

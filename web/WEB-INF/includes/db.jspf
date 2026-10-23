@@ -1,0 +1,23 @@
+<%@page import="java.sql.*"%>
+<%!
+    // Same settings as Database.java: override with env vars DB_URL / DB_USER / DB_PASSWORD
+    static String env(String key, String def) {
+        String v = System.getenv(key);
+        return v == null || v.isEmpty() ? def : v;
+    }
+
+    Connection getConn() throws Exception {
+        Class.forName("com.mysql.jdbc.Driver");
+        return DriverManager.getConnection(
+                env("DB_URL", "jdbc:mysql://localhost:3307/car_rental_system"),
+                env("DB_USER", "root"),
+                env("DB_PASSWORD", "root"));
+    }
+
+    // HTML-escape values from the database / request before printing them
+    String esc(Object o) {
+        if (o == null) return "";
+        return o.toString().replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+                .replace("\"", "&quot;").replace("'", "&#39;");
+    }
+%>

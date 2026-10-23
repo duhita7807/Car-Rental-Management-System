@@ -1,64 +1,37 @@
-6<%-- 
-    Document   : admin_login
-    Created on : 27 Apr, 2025, 11:40:27 PM
-    Author     : pc
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>User Login</title>
-    <link rel="stylesheet" href="bootstrap.min.css">
-    <style>
-        body {
-            background-image: url(car5.jfif);
-            background-size: cover;
-        }
-        .login-container {
-            margin-top: 100px;
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 7px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.3);
-        }
-        .form-title {
-            margin-bottom: 20px;
-        }
-        .register-link {
-            display: block;
-            text-align: center;
-            margin-top: 15px;
-        }
-    </style>
+    <title>Admin sign in - DriveEase</title>
+    <%@ include file="WEB-INF/includes/head.jspf" %>
 </head>
 <body>
+<%@ include file="WEB-INF/includes/header.jspf" %>
 
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="login-container">
-                    <h3 class="text-center form-title">Admin Login</h3>
-                    <form action="admin_login" method="post">
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" class="form-control" name="user" id="username" placeholder="Enter username" required>
-                        </div>
-                        <br>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" class="form-control" name="apass" id="password" placeholder="Enter password" required>
-                        </div>
-                        <br>
-                        <input type="submit" name="btn" value="Login" class="btn btn-info btn-block">
-                    </form>
-                   
-                </div>
-            </div>
+<main class="auth">
+  <div class="auth-side">
+    <h2>Admin console</h2>
+    <p>Manage brands, cars, bookings, payments and customer feedback.</p>
+  </div>
+  <div class="auth-form">
+    <div class="inner">
+      <h3 class="fw-bold mb-1">Admin sign in</h3>
+      <p class="text-muted mb-4">Staff access only.</p>
+      <form action="admin_login" method="post">
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input type="text" class="form-control" name="user" id="username" required>
         </div>
+        <div class="mb-4">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" name="apass" id="password" required>
+        </div>
+        <input type="submit" name="btn" value="Login" class="btn btn-accent w-100">
+      </form>
     </div>
+  </div>
+</main>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-

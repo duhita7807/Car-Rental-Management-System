@@ -14,14 +14,30 @@ import java.sql.Statement;
  */
 public class Database {
     
+    // Override with env vars DB_URL / DB_USER / DB_PASSWORD (e.g. on a server or in Docker)
+    static final String URL=env("DB_URL","jdbc:mysql://localhost:3307/car_rental_system");
+    static final String USER=env("DB_USER","root");
+    static final String PASSWORD=env("DB_PASSWORD","root");
+
+    static String env(String key,String def)
+    {
+        String v=System.getenv(key);
+        return v==null||v.isEmpty()?def:v;
+    }
+
+    static Connection getConnection() throws Exception
+    {
+        Class.forName("com.mysql.jdbc.Driver");
+        return DriverManager.getConnection(URL,USER,PASSWORD);
+    }
+
       Connection cn=null;
     Statement st=null;
      String ConnectDB()
     {
       try
       {
-         Class.forName("com.mysql.jdbc.Driver");
-         cn=DriverManager.getConnection("jdbc:mysql://localhost:3307/car_rental_system","root","root");
+         cn=getConnection();
          return("Database Connected");
       }catch(Exception ex)
       {

@@ -41,11 +41,13 @@ public class admin_login extends HttpServlet {
                if(user.toString().equals("Admin")&& apass.toString().equals("Password"))
         {
         out.println("Login Success");
+        req.getSession().setAttribute("admin", user);
         resp.sendRedirect("add_car_brand.jsp");
         }
         else
         {
-         out.println("Login Faild");
+         resp.setContentType("text/html");
+         out.println("<script>alert('Invalid admin credentials'); location='admin_login.jsp';</script>");
         }  
              }catch(Exception ex)
              {

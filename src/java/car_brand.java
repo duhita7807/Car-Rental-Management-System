@@ -45,7 +45,7 @@ out.println(description);
     resp.setContentType("text/html");
     out.println("<script type=\"text/javascript\">");
     out.println("alert('Car Brand Added Successfully');");
-    out.println("location='car_details.jsp';");
+    out.println("location='add_car_brand.jsp';");
     out.println("</script>");
 }
 
@@ -57,7 +57,7 @@ out.println(description);
     resp.setContentType("text/html");
     out.println("<script type=\"text/javascript\">");
     out.println("alert('" + Update + "');");
-    out.println("location='car_brand.jsp';");
+    out.println("location='add_car_brand.jsp';");
     out.println("</script>");
 }
 
@@ -68,7 +68,7 @@ if (event.equals("Delete")) {
     resp.setContentType("text/html");
     out.println("<script type=\"text/javascript\">");
     out.println("alert('" + Delete + "');");
-    out.println("location='car_brand.jsp';");
+    out.println("location='add_car_brand.jsp';");
     out.println("</script>");
 }
 
